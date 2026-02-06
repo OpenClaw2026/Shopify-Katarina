@@ -1,0 +1,171 @@
+<section class="footer-bar">
+  <div class="container">
+    <div class="row policy-slider has-slick not-arrows" data-slick='{
+	  slidesToShow:1,
+      dots: true,
+      slidesToScroll: 1,
+      autoplay:true,
+      adaptiveHeight: true,
+      fade: true,
+      autoplaySpeed:6000
+	  }'>
+      {% case section.blocks.size %}
+        {% when 1 %}
+          {%- assign column_size = 'col-12' -%}
+        {% when 2 %}
+          {%- assign column_size = 'col-12 col-md-6' -%}
+        {% when 3 %}
+          {%- assign column_size = 'col-12 col-lg-4' -%}
+        {% when 4 %}
+          {%- assign column_size = 'col-12 col-sm-6 col-lg-4 col-xl-3' -%}
+      {% endcase %}
+      
+      {% for block in section.blocks %}
+      {% if block.settings.policy_text != blank %}
+      <div class="item {{ column_size }}">
+        <div class="policy-item">
+          {% if block.settings.icon != blank %}
+          <span class="policy-icon policy-icon-{{ block.id }}">
+            {{ block.settings.icon }}
+          </span>
+          <style>
+            .footer-bar .policy-icon-{{ block.id }} svg {
+              -moz-transform: rotate({{ block.settings.policy_icon_rotate }}deg);
+              -o-transform: rotate({{ block.settings.policy_icon_rotate }}deg);
+              -ms-transform: rotate({{ block.settings.policy_icon_rotate }}deg);
+              -webkit-transform: rotate({{ block.settings.policy_icon_rotate }}deg);
+              transform: rotate({{ block.settings.policy_icon_rotate }}deg);
+            }
+          </style>
+          {% endif %}
+
+          <div class="policy-text">
+            {% render 'multilang' with block.settings.policy_text %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .footer-bar {
+    background-color: {{ section.settings.bg_policy_block }};
+    color: {{ section.settings.color_policy_text }};
+  }
+  
+  .footer-bar .policy-text {
+  	font-size: {{ section.settings.text_font_size }}px;
+  }
+  
+  .footer-bar .policy-icon .fa {
+  	font-size: {{ section.settings.icon_font_size }}px;
+  }
+
+  .footer-bar .policy-icon svg {
+      width: {{ section.settings.icon_font_size }}px;
+      height: {{ section.settings.icon_font_size }}px;
+      fill: {{ section.settings.color_policy_text }};
+      stroke: none;
+  }
+  .footer-bar .policy-icon img {
+    max-height: {{ section.settings.icon_font_size }}px;
+  }
+
+  @media (min-width: 540px) {
+    .footer-bar .item {
+      border-left: 1px solid rgba(255, 255, 255, 0);
+    }
+    
+    .footer-bar .item + .item {
+      border-left-color: {{ section.settings.color_policy_text | color_modify: 'alpha', 0.3 }};
+    }
+  }
+  
+  @media (max-width: 991px) {
+    .footer-bar .policy-item {
+      padding: 16px 0 15px;
+    }
+  }
+</style>
+
+<script>
+  
+  /*$(document).on('ready', function() {
+  $('.policy-slider').slick({
+     dots: false,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
+    autoplay:true
+});   
+  });*/
+</script>
+
+{% schema %}
+  {
+    "name": "Footer Bar",
+	"max_blocks": 4,
+	"settings": [
+	  {
+        "type" : "color",
+        "id" : "bg_policy_block",
+        "label" : "Background Footer Bar",
+        "default" : "#000"
+      },
+      {
+        "type" : "color",
+        "id" : "color_policy_text",
+        "label" : "Color Text",
+        "default" : "#fff"
+      },
+	   {
+        "type" : "text",
+        "id": "text_font_size",
+        "label" : "Text Font Size",
+        "default": "12"
+      },
+	   {
+        "type" : "text",
+        "id": "icon_font_size",
+        "label" : "Icon Font Size",
+        "default": "30"
+      }   
+            
+    ],
+	"blocks": [
+      {
+        "type": "textarea",
+        "name": "Text",
+        "settings": [
+          {
+            "type" : "text",
+            "id": "icon",
+            "label" : "Icon",
+            "info": "[Find your Icon](https://fontawesome.com/v4.7.0/icons/)."
+          },
+          {
+            "type" : "textarea",
+            "id" : "policy_text",
+            "label" : "Text",
+            "default" : "Free Shipping Worldwide"
+          },
+          {
+            "type" : "text",
+            "id" : "policy_icon_rotate",
+            "label" : "Rotate Icon",
+            "default" : "0"
+          }
+        ]
+      }
+    ],
+	"presets": [
+		{
+          "name": "Footer Bar",
+          "category": "Text"
+        }
+	]
+  }
+{% endschema %}

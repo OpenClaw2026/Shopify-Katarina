@@ -1,0 +1,16 @@
+{% render 'collection-header' %}
+<div class="row">
+  {% if settings.display_sidebar_cat_page %}
+   {% section 'sidebar' %}
+  {% endif %}
+  <div class="block-row col-main {% if settings.display_sidebar_cat_page %}col-xs-9{% endif %} list-right">
+    {% section 'collection-template' %}  
+  </div>
+  <div class="banner-collection-bottom" style="clear:both;padding:30px 0px 0px 0px">
+  {{collection.description |split:'<!--Collection Banner-->'| last}}
+    </div>
+</div>
+
+
+
+

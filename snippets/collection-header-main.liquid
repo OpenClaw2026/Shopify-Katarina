@@ -1,0 +1,16 @@
+<header class="page-header">
+  {% if collection.image %}
+  <div class="img_cart">
+      {% if collection.image != blank %}
+      <img src="{{ collection.image | img_url :"master"}}" alt="{{ collection.title | split: '|' | first }}" />
+     {% else %}
+        {% capture current %}{% cycle 2%}{% endcapture %}
+        {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+       {% endif %}
+     <div class="cat-banner-text">
+      	<h2>{{ collection.title | split: '|' | first }}</h2>
+       
+      </div>
+    </div>
+  {% endif %}
+</header>

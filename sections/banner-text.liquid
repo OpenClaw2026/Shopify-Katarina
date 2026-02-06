@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="middel-banner">
+  	<img src="{{ section.settings.middel-banner | img_url: 'master' }}" alt="middel-banner">
+    <div class="text-inner">
+      {{ section.settings.text_inner }}
+      {% if section.settings.button_text != blank %}
+      <a href="{{ section.settings.btn_link }}" class="btn common-btn">{{ section.settings.button_text }}</a>
+      {% endif %}
+    </div>
+  </div>
+</div>  
+
+
+{% schema %}
+  {
+    "name": "banner text section",
+	"class": "single-banner",
+    "settings": [
+		{
+          "type": "image_picker",
+          "id": "middel-banner",
+          "label": "Image"
+        },
+        {
+          "type": "html",
+          "id": "text_inner",
+          "label": "Custom HTML",
+          "default": "<div><p>Some HTML content</p></div>"
+        },
+		{
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text"
+        },
+		{
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link"
+        }
+	],
+	"presets": [
+		{
+          "name": "banner text",
+          "category": "Text"
+        }
+	]
+  }
+{% endschema %}
+
+
+
+  {% stylesheet %}
+  {% endstylesheet %}
+
+  {% javascript %}
+  {% endjavascript %}

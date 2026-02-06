@@ -1,0 +1,77 @@
+<div class="orenge-light common-specing">
+  <div class="container">
+    <h2 class="common-hd text-center">testimonials</h2>
+    {% assign rating = section.settings.rating %}
+    <div class="review-inner text-center">
+      <ul class="star-icon">
+        {% for i in (1..rating) %}
+        <li>{% render 'star-icon' %}</li>
+        {% endfor %}
+      </ul>
+      <p>{{ section.settings.content }}</p>
+      <h4>{{ section.settings.name }}</h4>
+    </div>
+    {% if section.settings.button_link %}
+    <div class="text-center infinite-scrolling-homepage">
+      <a href="{{ section.settings.button_link }}" class="btn common-btn">Read More</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Testimonail",
+	"settings": [
+	  {
+		"type": "select",
+        "id": "rating",
+        "label": "Rating",
+		"default": "5",
+		"options": [
+		  {
+			"value": "1",
+            "label": "1"
+          },
+		  {
+			"value": "2",
+            "label": "2"
+          },
+		  {
+            "value": "3",
+            "label": "3"
+          },
+		  {
+          	"value": "4",
+            "label": "4"
+          },
+		  {
+          	"value": "5",
+            "label": "5"
+          }
+		]
+      },
+	  {
+		"type": "textarea",
+        "id": "content",
+        "label": "Content"
+	  },
+	  {
+      	"type": "text",
+        "id": "name",
+        "label": "Name"
+	  },
+	  {
+      	"type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+	  }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

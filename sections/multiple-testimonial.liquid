@@ -1,0 +1,159 @@
+ {% if section.blocks.size > 0 %}
+
+<div class="orenge-light common-specing slick-list home-testimonial-slideshow">
+      <div class="variable-width1" data-slick='{
+      dots: true,
+      slidesToScroll: 1,
+      autoplay:true,
+      adaptiveHeight: true,
+      fade: {{ section.settings.slideshow_transition }},
+      autoplaySpeed:{{ section.settings.slideshow_speed }},
+                                 	
+	  }'>
+         {% for block in section.blocks %}
+<div class=" slideshow__slide--{{ block.id }}">
+  <div class="container">
+    <h2 class="common-hd text-center">testimonials</h2>
+    {% assign rating = block.settings.rating %}
+    <div class="review-inner text-center">
+      <ul class="star-icon">
+        {% for i in (1..rating) %}
+        <li>{% render 'star-icon' %}</li>
+        {% endfor %}
+      </ul>
+      <p>{{ block.settings.content }}</p>
+      <h4>{{ block.settings.name }}</h4>
+    </div>
+    {% if block.settings.button_link %}
+    <div class="text-center infinite-scrolling-homepage">
+      <a href="{{ block.settings.button_link }}" class="btn common-btn">Read More</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+     {% endfor %}
+
+</div>
+   </div>
+{% endif %}
+<script>
+  
+var prodVideoId= $('iframe').data('video-id');
+  $(document).on('ready', function() {
+  $('.variable-width1').fitVids().slick({
+     dots: true,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
+    autoplay:true,
+    fade: {{ section.settings.slideshow_transition }},
+    autoplaySpeed:{{ section.settings.slideshow_speed }},
+    adaptiveHeight: true,
+    afterChange: function(slick, currentSlide){
+    console.log(currentSlide);
+  }
+});   
+  })
+</script>
+{% schema %}
+  {
+    "name": "Testimonail",
+	"max_blocks": 10,
+	"settings" : [{
+        "type": "select",
+        "id": "slideshow_speed",
+        "label": "Change slides every",
+        "options": [
+          { "value": "1000", "label": "1 seconds" },
+          { "value": "2000", "label": "2 seconds" },
+          { "value": "3000", "label": "3 seconds" },
+          { "value": "4000", "label": "4 seconds" },
+          { "value": "5000", "label": "5 seconds" },
+          { "value": "6000", "label": "6 seconds" },
+          { "value": "7000", "label": "7 seconds" },
+          { "value": "8000", "label": "8 seconds" },
+          { "value": "9000", "label": "9 seconds" },
+          { "value": "10000", "label": "10 seconds" }
+        ],
+        "default": "5000"
+      },
+      {
+        "type": "select",
+        "id": "slideshow_transition",
+        "label": "Slideshow transition effect",
+        "options": [
+          {
+            "value": "false",
+            "label": "Slide"
+          },
+          {
+            "value": "true",
+            "label": "Fade"
+          }
+        ],
+        "default": "true"
+      }],
+	"blocks": [
+      {
+        "type": "quote",
+        "name": "Testimonail",
+      
+	"settings": [
+	  {
+		"type": "select",
+        "id": "rating",
+        "label": "Rating",
+		"default": "5",
+		"options": [
+		  {
+			"value": "1",
+            "label": "1"
+          },
+		  {
+			"value": "2",
+            "label": "2"
+          },
+		  {
+            "value": "3",
+            "label": "3"
+          },
+		  {
+          	"value": "4",
+            "label": "4"
+          },
+		  {
+          	"value": "5",
+            "label": "5"
+          }
+		]
+      },
+	  {
+		"type": "textarea",
+        "id": "content",
+        "label": "Content"
+	  },
+	  {
+      	"type": "text",
+        "id": "name",
+        "label": "Name"
+	  },
+	  {
+      	"type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+	  }
+	]
+}
+    ],
+"presets": [
+          {
+            "name": "Multiple Testimonail"
+          }
+        ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

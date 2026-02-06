@@ -1,0 +1,335 @@
+{% if section.settings.collection_results_per_page != blank %}
+  {% assign product_per_page = section.settings.collection_results_per_page %}
+{% else %}
+  {% assign product_per_page = 12 %}
+{% endif %}
+
+{% assign bestseller_collection = 'best-sellers-' | append: collection.handle %}
+{% assign women_collection = 'womens-' | append: collection.handle %}
+{% assign men_collection = 'mens-' | append: collection.handle %}
+
+{% for product in collection.products %}
+  {% for tag in product.tags %}
+	{% assign tag_down = tag | downcase %}
+	{% if tag_down == 'todays special' %}
+	  {% capture special_product %}
+	  <div class="special-left product-item {% if sold_out %}sold-out{% endif %}" id="product-{{ product.id }}">
+        <h2 class="special-hd">Todays-special</h2>
+        <div class="special-inner">
+          <div class="pro-img">
+            <a href="{{ product.url }}">
+              <img src="{{ product.featured_image | product_img_url: 'master' }}">
+            </a>
+          </div>
+          <div class="pro-detail">
+            <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+            <p class="price"><span class="old-price">{{ product.compare_at_price | money }}</span> <span class="special-price">{{ product.price | money }}</span></p>
+            <form action="/cart/add" method="post" class="variants" id="product-actions-{{ product.id }}" enctype="multipart/form-data" style="padding:0px;">
+              {% if sold_out %}
+              <input class="btn add-to-cart-btn" type="submit" value="{{ 'products.product.unavailable' | t }}" disabled="disabled"/>
+              {% else %}
+              {% if product.variants.size > 1 %}
+              <input class="btn" type="button" onclick="window.location.href='{{product.url}}'" value="{{ 'products.product.select_options' | t }}"/>
+              {% else %}
+              <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+              <input class="btn add-to-cart-btn" type="submit" value="{{ 'products.product.add_to_cart' | t }}" {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}/>
+              {% endif %}
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+	  {% endcapture %}
+    {% endif %}
+    {% if tag_down == 'stackable' %}
+	  {% capture stackable_product %}
+      <div class="special-right">
+        <h2 class="special-hd">Stackables</h2>
+        <div class="special-inner">
+          <div class="pro-img">
+            <a href="{{ product.url }}">
+              <img src="{{ product.featured_image | product_img_url: 'master' }}">
+            </a>
+          </div>
+          <div class="pro-detail">
+            <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+            <p class="price"><span class="old-price">{{ product.compare_at_price | money }}</span> <span class="special-price">{{ product.price | money }}</span></p>
+            <form action="/cart/add" method="post" class="variants" id="product-actions-{{ product.id }}" enctype="multipart/form-data" style="padding:0px;">
+              {% if sold_out %}
+              <input class="btn add-to-cart-btn" type="submit" value="{{ 'products.product.unavailable' | t }}" disabled="disabled"/>
+              {% else %}
+              {% if product.variants.size > 1 %}
+              <input class="btn" type="button" onclick="window.location.href='{{product.url}}'" value="{{ 'products.product.select_options' | t }}"/>
+              {% else %}
+              <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+              <input class="btn add-to-cart-btn" type="submit" value="{{ 'products.product.add_to_cart' | t }}" {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}/>
+              {% endif %}
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+	  {% endcapture %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+{% if collections[bestseller_collection].products.size > 0 %}
+<div class="widget-trending-product container">
+  <div class="widget-title wow fadeIn">
+    <fieldset class="box-title">
+      <legend align="center">{{ collections[bestseller_collection].title }}</legend>
+    </fieldset>
+  </div>
+  <div class="widget-product">
+    <div class="products-grid">
+      {% for product in collections[bestseller_collection].products limit:5 %}
+        <div class="no_crop_image grid-item col-xs-6 col-sm-4 col">
+        {% include 'product-grid-item' %}
+        </div>
+      {% endfor %}
+     </div>
+  </div>
+  <a class="link text-center" href="{{ collections[bestseller_collection].url }}">Show More</a>
+</div>
+{% endif %}
+ {% if special_product %}
+<div class="special-sec">
+ 
+    {{ special_product }}
+  {% endif %}
+  {% if stackable_product %}
+  	{{ stackable_product }}
+ 
+</div>
+ {% endif %}
+{% if collections[women_collection].products.size > 0 %}
+<div class="widget-trending-product container">
+  <div class="widget-title wow fadeIn">
+    <fieldset class="box-title">
+      <legend align="center">{{ collections[women_collection].title }}</legend>
+    </fieldset>
+  </div>
+  <div class="widget-product">
+    <div class="products-grid">
+      {% for product in collections[women_collection].products limit:5 %}
+        <div class="no_crop_image grid-item col-xs-6 col-sm-4 col">
+        {% include 'product-grid-item' %}
+        </div>
+      {% endfor %}
+     </div>
+  </div>
+  <a class="link text-center" href="{{ collections[women_collection].url }}">Show More</a>
+</div>
+{% endif %}
+
+{% if collections[men_collection].products.size > 0 %}
+<div class="widget-trending-product container">
+  <div class="widget-title wow fadeIn">
+    <fieldset class="box-title">
+      <legend align="center">{{ collections[men_collection].title }}</legend>
+    </fieldset>
+  </div>
+  <div class="widget-product">
+    <div class="products-grid">
+      {% for product in collections[men_collection].products limit:5 %}
+        <div class="no_crop_image grid-item col-xs-6 col-sm-4 col">
+        {% include 'product-grid-item' %}
+        </div>
+      {% endfor %}
+     </div>
+  </div>
+  <a class="link text-center" href="{{ collections[men_collection].url }}">Show More</a>
+</div>
+{% endif %}
+<!--
+<div class="container">
+<div class="cat-banner-sec">
+  <div class="cat-banner-left">
+      <div class="custom-images">
+        <img src="//via.placeholder.com/750x375" alt="">
+        <div class="inner-text">
+          <h4>Lorem Ipsum Dolor</h4>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+          <a class="links" href=""><span>Shop The Collection</span></a>
+        </div>    
+      </div>
+      <div class="custom-images">
+        <img src="//via.placeholder.com/750x375" alt="">
+        <div class="inner-text">
+          <h4>Lorem Ipsum Dolor</h4>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+          <a class="links" href=""><span>Shop The Collection</span></a>
+        </div>    
+      </div>	
+  </div>
+  <div class="cat-banner-right">
+  	<div class="custom-images">
+      <img src="//via.placeholder.com/750x768" alt="">
+      <div class="inner-text">
+        <h4>Lorem Ipsum Dolor</h4>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+        <a class="links" href=""><span>Shop The Collection</span></a>
+      </div>    
+    </div>
+  </div>
+</div>
+</div>
+-->
+{% comment %}
+{% if collections[women_collection].products.size > 0 %}
+<div class="widget-trending-product container">
+  <div class="widget-title wow fadeIn">
+    <fieldset class="box-title">
+      <legend align="center">{{ collections[women_collection].title }}</legend>
+    </fieldset>
+  </div>
+  {% assign women_description = collections[women_collection].description %}
+  {% if women_description contains '<!--Sub Cat-->' %}
+  <div class="subcat-listing">
+    {% assign women_subcat = women_description | split:'<!--Sub Cat-->' | last | split:',' %}
+    {% for subcat in women_subcat limit:6 %}
+  	  <div class="widget-product">
+        <div class="products-grid">
+          <a href="{{ collections[subcat].url }}">
+            <img src="{{ collections[subcat].image | img_url:'223x' }}">
+            <h2>{{ collections[subcat].title }}</h2>
+          </a>
+        </div>
+  	  </div>
+   	{% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+
+
+{% if collections[men_collection].products.size > 0 %}
+<div class="widget-trending-product container">
+  <div class="widget-title wow fadeIn">
+    <fieldset class="box-title">
+      <legend align="center">{{ collections[men_collection].title }}</legend>
+    </fieldset>
+  </div>
+  {% assign men_description = collections[men_collection].description %}
+  {% if men_description contains '<!--Sub Cat-->' %}
+  <div class="subcat-listing">
+    {% assign men_subcat = men_description | split:'<!--Sub Cat-->' | last | split:',' %}
+    {% for subcat in men_subcat limit:6 %}
+  	  <div class="widget-product">
+        <div class="products-grid">
+          <a href="{{ collections[subcat].url }}">
+            <img src="{{ collections[subcat].image | img_url:'223x' }}">
+            <h2>{{ collections[subcat].title }}</h2>
+          </a>
+        </div>
+  	  </div>
+   	{% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endcomment %}
+{% if collections[bestseller_collection].products.size > 0 or  collections[women_collection].products.size > 0 or collections[men_collection].products.size > 0%}
+{{ collection.description | split:'<!--Sub Cat-->' | first }}
+{% endif %}
+{% comment %}
+<div class="orenge-light common-specing">
+  <div class="container">
+    <h2 class="common-hd text-center">testimonials</h2>
+    <div class="review-inner text-center">
+      <ul class="star-icon">
+        <li>{% render 'star-icon' %}</li>
+        <li>{% render 'star-icon' %}</li>
+        <li>{% render 'star-icon' %}</li>
+        <li>{% render 'star-icon' %}</li>
+        <li>{% render 'star-icon' %}</li>
+      </ul>
+      <p>“This is so my style.get complimented on my ring all the time”</p>
+      <h4>helen mcgregory</h4>
+    </div>
+    <div class="text-center infinite-scrolling-homepage"><a href="#" class="btn common-btn">Read More</a></div>
+  </div>
+</div>
+
+<div class="education-sec">
+  <div class="education-text">
+    <div class="education-inner">
+      <h2>{{ section.settings.content_heading }}</h2>
+      {{ section.settings.content_des }}
+      <a href="{{ section.settings.button_link }}" class="btn common-btn">{{ section.settings.button_title }}</a>
+    </div>
+  </div>
+  <div class="education-img">
+    <img src="{{ section.settings.content_image | img_url:'master' }}">
+  </div>
+</div>
+ 
+{% endcomment %}
+{% schema %}
+  {
+    "name": "Collection pages",
+	"class":"container",
+    "settings": [
+      {
+        "type": "select",
+        "id": "collection_results_per_row",
+        "label": "Products per row (grid only)",
+        "default": "4",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "collection_results_per_page",
+        "label": "Products per page  (grid only) ",
+        "default": "12"
+      },
+	  {
+        "type": "header",
+        "content": "Content Section"
+      },
+	  {
+        "type": "image_picker",
+        "id": "content_image",
+        "label": "Image"
+      },
+	  {
+        "type": "text",
+        "id": "content_heading",
+        "label": "Heading"
+      },
+	  {
+        "type": "richtext",
+        "id": "content_des",
+        "label": "Content"
+      },
+	  {
+        "type": "text",
+        "id": "button_title",
+        "label": "Button Text"
+      },
+	  {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      }
+    ]
+  }
+{% endschema %}
+

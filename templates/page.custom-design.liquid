@@ -1,0 +1,46 @@
+<header class="page-header">
+  <h2>{{ page.title | split: '|' | first }}</h2>
+</header>
+
+<div class="rte">
+  {% form 'contact' %}
+    {% comment %}
+      Successful message
+    {% endcomment %}
+    {% if form.posted_successfully? %}
+    <p class="note form-success">
+      Form Has Beed Submitted.
+    </p>
+    {% endif %}
+    
+    {{ form.errors | default_errors }}
+    
+    <div class="row">    
+      <div class="col-xs-12 col-lg-12">
+        <div id="contactFormWrapper">
+          <p class="line"></p>
+          
+          <label><span>{{ 'contact.form.name' | t }}</span></label>
+          <input type="text" id="customFormName" name="contact[Name]" autocapitalize="words">
+          
+          <label><span>{{ 'contact.form.email' | t }}</span><em>*</em></label>
+          <input type="email" name="contact[email]" id="customFormEmail" autocorrect="off" autocapitalize="off">
+          <p class="custom-error" id="email-error"></p>
+            
+          <label><span>{{ 'contact.form.phone' | t }}</span></label>
+          <input type="tel" name="contact[Phone]" id="customFormPhone" pattern="[0-9]*">
+          
+          <label><span>Upload Image</span></label>
+          <input type="file" name="contact[Uploaded File]" id="customFormFile" accept="image/*">
+          
+          <label><span>{{ 'contact.form.message' | t }}</span><em>*</em></label>
+          <textarea rows="5" name="contact[Comments]" id="customFormMessage"></textarea>
+          <p class="custom-error" id="comment-error"></p>
+          
+          <input type="submit" id="custom-submit" class="btn" value="Submit">
+        </div>
+      </div>
+    </div>
+    {% endform %}
+</div>
+

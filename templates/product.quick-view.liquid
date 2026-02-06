@@ -1,0 +1,279 @@
+{% layout none %}
+<!-- Begin quick-view-template -->
+<div class="clearfix" id="quickview-template">
+  <div class="overlay"></div>
+  <div class="content clearfix">
+    <div class="product-img-box col-xs-5">
+      <div class="quickview-featured-image product-photo-container"></div>
+      <div class="more-view-wrapper" style="display:none;">
+        <ul class="product-photo-thumbs jcarousel-skin-tango {% if settings.style_moreview == 'horizontal' %} quickview-more-views-owlslider {% else %} quickview-more-view-wrapper-jcarousel {% endif %}">
+        </ul>
+      </div>
+    </div>
+  
+    <div class="product-shop col-xs-7">
+      <div class="product-item">
+        {% if settings.display_quickview_vendor %}
+          <p class="product-vendor vendor-top">            
+            <span></span>
+          </p>
+          {% endif %}
+        <h2 class="product-title"><a>&nbsp;</a></h2>
+       <div class="sku-stock-main">
+        <p class="product-sku">SKU: <span></span></p>
+        
+        {% if settings.display_quickview_availability or settings.display_quickview_product_type or settings.display_quickview_vendor %}
+        <div class="product-infor">
+          {% if settings.display_quickview_availability %}
+          <div class="product-rev-stock">
+            <p class="product-inventory">
+              <span></span>
+            </p>
+          </div>  
+          {% endif %}
+          {% if settings.display_quickview_product_type %}
+          <p class="product-type">
+            {% if settings.text_product_type != blank %}
+              {% if settings.enable_multilang %}
+              <label class="lang1">{{ settings.text_product_type | split: '|' | first }}</label>
+              <label class="lang2">{{ settings.text_product_type | split: '|' | last }}</label>
+              {% else %}
+              <label>{{ settings.text_product_type | split: '|' | first }}</label>
+              {% endif %}
+            {% endif %}
+            <span></span>
+          </p>
+          {% endif %}
+          {% if settings.display_quickview_vendor %}
+          <p class="product-vendor">
+            {% if settings.text_vendor != blank %}
+              {% if settings.enable_multilang %}
+              <label class="lang1">{{ settings.text_vendor | split: '|' | first }}</label>
+              <label class="lang2">{{ settings.text_vendor | split: '|' | last }}</label>
+              {% else %}
+              <label>{{ settings.text_vendor | split: '|' | first }}</label>
+              {% endif %}
+            {% endif %}
+            <span></span>
+          </p>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+        
+        <div class="countdown" style="display:none">
+          {% if settings.enable_multilang %}
+          <span class="lang1">{{ settings.text_countdown | split: '|' | first }}</span>
+          <span class="lang2">{{ settings.text_countdown | split: '|' | last }}</span>
+          {% else %}
+          <span>{{ settings.text_countdown | split: '|' | first }}</span>
+          {% endif %}
+          <div class="quickview-clock"></div>
+        </div>
+        
+        {% if settings.display_quickview_short_desc %}
+        <p class="item-text product-description"></p>
+        {% endif %}
+
+        <div class="details clearfix">
+<!--           <form action="/cart/add" method="post" class="variants"> -->
+          {% form 'product', product, id: "add-to-cart-form", class:"variants" %}
+            <select name='id' style="display:none"></select>
+            <div class="prices">
+              <span class="price"></span>
+              <span class="compare-price"></span>
+            </div>
+            <div class="qty-dtl-main">
+              <label for="quantity" {% if settings.enable_multilang %}data-translate="cart.label.quantity"{% endif %}>{{ 'cart.label.quantity' | t }}:</label>
+              <div class="extra">
+                <div class="dec button">-</div>
+                <input type="text" name="quantity" value="1" class="quantity">
+                <div class="inc button">+</div>
+              </div>
+              <a class="quick_view_detail" href="">View Full Details</a>
+            </div>
+            
+            {% if settings.display_quickview_subtotal %}
+            <div class="total-price">
+              <label {% if settings.enable_multilang %}data-translate="cart.general.subtotal"{% endif %}>{{ 'cart.general.subtotal' | t }}</label><span></span>
+            </div>
+            {% endif %}
+            
+            <div class="actions detail-btn">
+              <button type="button" class="btn add-to-cart-btn" {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}>{{ 'products.product.add_to_cart' | t }}</button>
+              {{ form | payment_button }}
+<!--               <a class="btn buy-now-btn" id="quick-buy-now">Buy It Now</a> -->
+            </div>
+<!--           </form> -->
+          {% endform %}
+        </div>
+        {% if settings.display_product_detail_share %} 
+          {% include 'share' with product %}
+        {% endif %}
+      </div>
+    </div>
+    
+    <div id="imgAltDiv"></div>
+    
+    <a href="javascript:void(0)" class="close-window" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.close"{% endif %}>{{ 'cart.ajax_cart.close' | t }}</a> 
+  </div>
+</div>
+<!-- End of quick-view-template -->
+<script type="text/javascript">
+  
+  var yellow_gold 		= '{{ "yellow-gold.png" | asset_img_url:"master" }}';
+  var white_gold 		= '{{ "white-gold.png" | asset_img_url:"master" }}';
+  var rose_gold 		= '{{ "rose-gold.png" | asset_img_url:"master" }}';
+  var white_yellow_gold	= '{{ "white-and-yellow-gold.png" | asset_img_url:"master" }}';
+  var rose_white_gold 	= '{{ "rose-and-white-gold.png" | asset_img_url:"master" }}';
+  var platinum 			= '{{ "platinum.png" | asset_img_url:"master" }}';
+  var sterling_silver	= '{{ "sterling-silver.png" | asset_img_url:"master" }}';
+  var i12_img 			= '{{ "i12.png" | asset_img_url:"master" }}';
+  var s12_img 			= '{{ "s12.png" | asset_img_url:"master" }}';
+  var vs2_img 			= '{{ "vs2.png" | asset_img_url:"master" }}';
+  
+  Shopify.doNotTriggerClickOnThumb = false; 
+                                       
+  var selectCallbackQuickview = function(variant, selector) {
+      var productItem = jQuery('.quick-view .product-item');
+          addToCart = productItem.find('.add-to-cart-btn'),
+          productSKU = productItem.find('.product-sku span'),
+          productPrice = productItem.find('.price'),
+          comparePrice = productItem.find('.compare-price'),
+          totalPrice = productItem.find('.total-price span');
+    
+      var qty_val = parseInt(jQuery('.quick-view input[name=quantity]').val());
+      
+      if (variant) {
+        if (variant.available) {
+          // We have a valid product variant, so enable the submit button
+          addToCart.removeClass('disabled').removeAttr('disabled').text(window.inventory_text.add_to_cart);
+          $("#quick-buy-now").attr('href', '/cart/'+variant.id+':'+qty_val);
+    
+        } else {
+          // Variant is sold out, disable the submit button
+          addToCart.val(window.inventory_text.sold_out).addClass('disabled').attr('disabled', 'disabled');
+          $("#quick-buy-now").attr('href', '/cart/'+variant.id+':'+qty_val).addClass('disabled').attr('disabled', 'disabled');
+        }
+        
+        if(variant.sku != ''){
+          productSKU.html(variant.sku);
+        }
+    
+        // Regardless of stock, update the product price
+        productPrice.html(Shopify.formatMoney(variant.price, "{{ shop.money_format }}"));
+    
+        // Also update and show the product's compare price if necessary
+        if ( variant.compare_at_price > variant.price ) {
+          comparePrice
+            .html(Shopify.formatMoney(variant.compare_at_price, "{{ shop.money_format }}"))
+            .show();
+          productPrice.addClass('on-sale');
+        } else {
+          comparePrice.hide();
+          productPrice.removeClass('on-sale');
+        }
+                            
+        {% if settings.use_color_swatch %}
+        // BEGIN SWATCHES
+          var form = jQuery('#' + selector.domIdPrefix).closest('form');
+          for (var i=0,length=variant.options.length; i<length; i++) {
+            var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] +'"]');
+            if (radioButton.size()) {
+              radioButton.get(0).checked = true;
+            }
+          }
+         // END SWATCHES
+         {% endif %}
+         
+      //update variant inventory
+        {% if settings.display_quickview_availability %}
+          var inventoryInfo = productItem.find('.product-inventory span');
+          if (variant.available) {
+            if (variant.inventory_management!=null) {
+              //inventoryInfo.text(variant.inventory_quantity + " " + window.inventory_text.in_stock);
+              inventoryInfo.text(window.inventory_text.in_stock);
+            } else {console.log('bbbb');
+              inventoryInfo.text(window.inventory_text.many_in_stock);
+            }
+          } else {console.log('ccc');
+            inventoryInfo.text(window.inventory_text.out_of_stock);
+          }
+      {% endif %}
+    
+      /*recaculate total price*/
+        //try pattern one before pattern 2
+        var regex = /([0-9]+[.|,][0-9]+[.|,][0-9]+)/g;
+        var unitPriceTextMatch = jQuery('.quick-view .price').text().match(regex);
+
+        if (!unitPriceTextMatch) {
+          regex = /([0-9]+[.|,][0-9]+)/g;
+          unitPriceTextMatch = jQuery('.quick-view .price').text().match(regex);     
+        }
+
+        if (unitPriceTextMatch) {
+          var unitPriceText = unitPriceTextMatch[0];     
+          var unitPrice = unitPriceText.replace(/[.|,]/g,'');
+          var quantity = parseInt(jQuery('.quick-view input[name=quantity]').val());
+          var totalPrice = unitPrice * quantity;
+
+          var totalPriceText = Shopify.formatMoney(totalPrice, window.money_format);
+          regex = /([0-9]+[.|,][0-9]+[.|,][0-9]+)/g;     
+          if (!totalPriceText.match(regex)) {
+            regex = /([0-9]+[.|,][0-9]+)/g;
+          } 
+          totalPriceText = totalPriceText.match(regex)[0];
+
+          var regInput = new RegExp(unitPriceText, "g"); 
+          var totalPriceHtml = jQuery('.quick-view .price').html().replace(regInput ,totalPriceText);
+          jQuery('.quick-view .total-price span').html(totalPriceHtml);     
+        }
+    /*end of price calculation*/
+
+    
+        {% if settings.enable_multiple_currencies %}
+        Currency.convertAll('{{ shop.currency }}', jQuery('.currencies').val(), 'span.money', 'money_format');
+        {% endif %}
+        
+        /*begin variant image*/
+        if (variant && variant.featured_image) {
+            var originalImage = jQuery(".quick-view .quickview-featured-image img");
+            var newImage = variant.featured_image;
+            var element = originalImage[0];
+            Shopify.Image.switchImage(newImage, element, function (newImageSizedSrc, newImage, element) {
+              newImageSizedSrc = newImageSizedSrc.replace(/\?(.*)/,"");
+              jQuery('.quick-view .more-view-wrapper img').each(function() {
+                var grandSize = jQuery(this).attr('src');
+                grandSize = grandSize.replace('compact','grande');
+               
+                if (grandSize == newImageSizedSrc) {
+                  jQuery(this).parent().trigger('click');              
+                  return false;
+                }
+              });
+            });        
+        }
+        /*end of variant image*/   
+    
+      } else {
+        // The variant doesn't exist. Just a safegaurd for errors, but disable the submit button anyway
+        addToCart.text(window.inventory_text.unavailable).addClass('disabled').attr('disabled', 'disabled');
+      }
+  	
+  	var gemVal   = $(".swatch-gemstone-quality input[type='radio']:checked").attr('data-val');
+  	var caratVal = $(".swatch-total-carat-weight input[type='radio']:checked").attr('data-val');
+  	var metalVal = $(".swatch-metal-type input[type='radio']:checked").attr('data-val');
+  
+  	var variant_handle = gemVal +'-'+ caratVal +'-'+ metalVal;
+  	var bgimage = '';
+  	if($("#"+variant_handle).length > 0){
+      var bgimage = $("#"+variant_handle).val();
+  	}
+  	$(".swatch-total-carat-weight input[type='radio']:checked").next('label').removeAttr('class');
+  	$(".swatch-total-carat-weight input[type='radio']:checked").next('label').addClass(variant_handle);
+  	if(bgimage != ''){
+      $(".swatch-total-carat-weight input[type='radio']:checked").next('label').css('background-image', 'url(' + bgimage + ')');
+    }
+  };
+</script>
+

@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="page-header" style="padding:0px 10px">
+    {% if current_tags %}    
+      <h1><a href="{{ blog.url }}">{% include 'multilang' with page_title %}</a> &raquo; {{ current_tags.first }}</h1>
+    {% else %}    
+      <h1>{% include 'multilang' with page_title %}</h1>
+    {% endif %}
+  </div>
+  {% section 'sidebar-blog' %}
+
+  {% section 'blog-template' %}  
+</div>

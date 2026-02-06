@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="about-company">
+  	<div class="left-sec">
+  	<img src="{{ section.settings.left-img | img_url: 'master' }}" alt="banner1">
+  </div>
+  	<div class="right-sec">
+    <h2 class="common-hd">{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.small-heading}}</p>
+      <div class="infinite-scrolling-homepage"><a href="{{ section.settings.read-button-link }}" class="btn common-btn">{{ section.settings.read-button}}</a></div>
+  </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "About Content",
+	"class": "index-section",
+    "settings": [
+		{
+          "type": "image_picker",
+          "id": "left-img",
+          "label": "Image"
+        },
+		{
+        "id": "heading",
+        "type": "text",
+        "label": "heading",
+        "default": "heading"
+        },
+		{
+        "id": "small-heading",
+        "type": "textarea",
+        "label": "small-heading",
+        "default": "small-heading"
+        },
+		{
+        "id": "read-button",
+        "type": "text",
+        "label": "read-button",
+        "default": "read-button"
+        },
+		{
+        "id": "read-button-link",
+        "type": "url",
+        "label": "button link"
+        }
+		
+	],
+	"presets": [
+		{
+          "name": "About Content",
+          "category": "Text"
+        }
+	]
+  }
+{% endschema %}
+
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

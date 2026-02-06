@@ -1,0 +1,6 @@
+<style type="text/css">
+  {% for image in product.images %}
+  {% assign image_url = image.src | product_img_url: "40x" %}
+  .{{ image.alt | split:',' | last | handleize }} { background-image: url({{ image_url }}); }
+  {% endfor %}
+</style>

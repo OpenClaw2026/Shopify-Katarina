@@ -58,10 +58,10 @@ jQuery(document).ready(function() {    //
           <a class="btn close" title="{{ 'cart.ajax_cart.close' | t }}" data-translate="cart.ajax_cart.close">{{ 'cart.ajax_cart.close' | t }}</a>
           <div class="left">
             {% if settings.enable_multilang %}
-            <h1 class="title lang1">{{ settings.popup_newsletter_title | split: '|' | first }}</h1>
-            <h1 class="title lang2">{{ settings.popup_newsletter_title | split: '|' | last }}</h1>
+            <h2 class="title lang1">{{ settings.popup_newsletter_title | split: '|' | first }}</h2>
+            <h2 class="title lang2">{{ settings.popup_newsletter_title | split: '|' | last }}</h2>
             {% else %}
-            <h1 class="title">{{ settings.popup_newsletter_title | split: '|' | first }}</h1>
+            <h2 class="title">{{ settings.popup_newsletter_title | split: '|' | first }}</h2>
             {% endif %}
             
             {% if settings.enable_multilang %}

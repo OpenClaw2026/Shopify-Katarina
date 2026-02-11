@@ -94,7 +94,11 @@
       
       <div class="header-panel">
         <div class="row">
+          {% if template == 'index' %}
           <h1 class="header-logo col-xs-12 col-sm-4">
+          {% else %}
+          <div class="header-logo col-xs-12 col-sm-4">
+          {% endif %}
             {% if settings.brand_type == 'image' %}
             <a href="/">
               {{ 'logo.png' | asset_url | img_tag: shop.name }}
@@ -107,7 +111,11 @@
             {% else %}
             <a class="logo-title" href="/">{{shop.name}}</a>
             {% endif %}
+          {% if template == 'index' %}
           </h1>
+          {% else %}
+          </div>
+          {% endif %}
 
           <div class="header-panel-bottom col-xs-12 col-sm-8">
             {% if settings.display_header_free_shipping and settings.header_free_shipping != blank %}
